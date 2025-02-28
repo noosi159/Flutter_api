@@ -4,6 +4,8 @@ class AirQuality {
   final String status;
   final String date;
   final String time;
+  final double lat; // เพิ่มตัวแปร lat
+  final double long; // เพิ่มตัวแปร long
 
   AirQuality({
     required this.stationName,
@@ -11,6 +13,8 @@ class AirQuality {
     required this.status,
     required this.date,
     required this.time,
+    required this.lat, // เพิ่ม parameter lat
+    required this.long, // เพิ่ม parameter long
   });
 
   factory AirQuality.fromJson(Map<String, dynamic> json) {
@@ -25,6 +29,12 @@ class AirQuality {
     String time = json['AQILast'] != null
         ? json['AQILast']['time'] ?? 'Unknown'
         : 'Unknown';
+    double lat = json['lat'] != null
+        ? double.tryParse(json['lat'].toString()) ?? 0.0
+        : 0.0;
+    double long = json['long'] != null
+        ? double.tryParse(json['long'].toString()) ?? 0.0
+        : 0.0;
 
     return AirQuality(
       stationName: json['nameTH'] ?? 'N/A',
@@ -32,6 +42,8 @@ class AirQuality {
       status: status,
       date: date,
       time: time,
+      lat: lat, // กำหนดค่า lat
+      long: long, // กำหนดค่า long
     );
   }
 }
