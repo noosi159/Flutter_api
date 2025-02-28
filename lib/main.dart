@@ -49,7 +49,7 @@ class AirQualityPageState extends State<AirQualityPage> {
 
       return stations.map((station) => AirQuality.fromJson(station)).toList();
     } else {
-      throw Exception('Failed to load air quality data');
+      throw Exception('Failed to load AQI Status APP');
     }
   }
 
@@ -58,7 +58,7 @@ class AirQualityPageState extends State<AirQualityPage> {
     if (aqi <= 50) {
       return Colors.green; // Air quality is good
     } else if (aqi <= 100) {
-      return const Color.fromARGB(255, 38, 96, 44); // Moderate air quality
+      return const Color.fromARGB(255, 9, 63, 14); // Moderate air quality
     } else if (aqi <= 120) {
       return const Color.fromARGB(
           255, 235, 199, 20); // Unhealthy for sensitive groups
@@ -89,7 +89,7 @@ class AirQualityPageState extends State<AirQualityPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: getAppBarColor(50), // เปลี่ยนสีหัวข้อให้เหมาะสมกับ AQI
-        title: Text('Air Quality Data'),
+        title: Text('AQI Status APP'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -108,7 +108,13 @@ class AirQualityPageState extends State<AirQualityPage> {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               final airQualityList = snapshot.data!;
-              return ListView.builder(
+              return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // แสดง 2 การ์ดในแต่ละแถว
+                  crossAxisSpacing: 10, // ระยะห่างระหว่างการ์ดในแนวนอน
+                  mainAxisSpacing: 10, // ระยะห่างระหว่างการ์ดในแนวตั้ง
+                  childAspectRatio: 0.8, // ปรับขนาดของการ์ดให้เล็กลง
+                ),
                 itemCount: airQualityList.length,
                 itemBuilder: (context, index) {
                   final airQuality = airQualityList[index];
@@ -118,45 +124,41 @@ class AirQualityPageState extends State<AirQualityPage> {
                   String location =
                       "Lat: ${airQuality.lat}, Long: ${airQuality.long}";
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 15.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Card(
-                        elevation: 5, // เพิ่มเงาให้กับการ์ด
-                        color: cardColor,
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          title: Text(
-                            airQuality.stationName,
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'AQI: ${airQuality.aqi}\nStatus: ${airQuality.status}',
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                'Date & Time: $dateTime',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                'Location: $location',
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white),
-                              ),
-                            ],
-                          ),
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Card(
+                      elevation: 5, // เพิ่มเงาให้กับการ์ด
+                      color: cardColor,
+                      child: ListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        title: Text(
+                          airQuality.stationName,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'AQI: ${airQuality.aqi}\nStatus: ${airQuality.status}',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              'Date & Time: $dateTime',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              'Location: $location',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                          ],
                         ),
                       ),
                     ),
