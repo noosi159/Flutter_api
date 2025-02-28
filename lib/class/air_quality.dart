@@ -29,10 +29,12 @@ class AirQuality {
     String time = json['AQILast'] != null
         ? json['AQILast']['time'] ?? 'Unknown'
         : 'Unknown';
-
-    // ดึงค่า lat และ long จาก JSON
-    double lat = json['lat'] != null ? json['lat'].toDouble() : 0.0;
-    double long = json['long'] != null ? json['long'].toDouble() : 0.0;
+    double lat = json['lat'] != null
+        ? double.tryParse(json['lat'].toString()) ?? 0.0
+        : 0.0;
+    double long = json['long'] != null
+        ? double.tryParse(json['long'].toString()) ?? 0.0
+        : 0.0;
 
     return AirQuality(
       stationName: json['nameTH'] ?? 'N/A',
